@@ -154,7 +154,9 @@ public class PlayerController : MonoBehaviour
     {
         if (anim != null)
         {
-            anim.SetTrigger("isHit"); 
+            anim.SetTrigger("isHit");
+            
+            GameManager.Instance.GameOver();
         }
 
         // Disable this script and the collider
