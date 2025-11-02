@@ -658,7 +658,7 @@ MonoBehaviour:
   - {fileID: 1627928603}
   - {fileID: 1270872133}
   - {fileID: 2144990594}
-  player: {fileID: 0}
+  player: {fileID: 2061977771}
   chunkLength: 15
 --- !u!4 &760191066
 Transform:
