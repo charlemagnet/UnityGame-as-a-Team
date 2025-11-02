@@ -6,8 +6,7 @@ public class maphareket : MonoBehaviour
     public GameObject[] mapChunkPrefabs; 
     public GameObject[] activeChunks; // Lütfen bunları soldan sağa sıralı atayın!
     public Transform player; 
-    [SerializeField]
-    private float chunkLength = 15f; 
+    public float chunkLength; 
 
     // [Dahili Değişkenler]
     private float nextSpawnXPosition; 
@@ -57,7 +56,7 @@ public class maphareket : MonoBehaviour
             GameObject randomPrefab = mapChunkPrefabs[randomIndex];
             
             // Yeni parçanın pozisyonunu belirle
-            Vector3 spawnPosition = new Vector3(nextSpawnXPosition, chunkToDelete.transform.position.y, 0);
+            Vector3 spawnPosition = new Vector3(nextSpawnXPosition, 0, 0);
             
             // Yeni parçayı sahnede yarat
             GameObject newChunk = Instantiate(randomPrefab, spawnPosition, Quaternion.identity);
