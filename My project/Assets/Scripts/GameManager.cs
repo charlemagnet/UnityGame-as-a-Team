@@ -3,84 +3,93 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
-    [Header("UI Elements")]
-    [Tooltip("For score.")]
-    // 3. UI Text Referansı
-    public TextMeshProUGUI scoreText; 
+    [Header("UI Elements")]
+    [Tooltip("For score.")]
+    public TextMeshProUGUI scoreText; // Oyun içindeki skor yazısı
 
-    [Header("Scoring")]
-    public float scoreMultiplier = 10f;
-    
-    private float scoreCounter = 0f; // Skoru hassas tutmak için float
-    private int displayScore = 0; // Ekranda gösterilecek tam sayı skor
-    private bool isGameActive = true; // Oyuncu ölünce skoru durdurmak için
+    [Header("Scoring")]
+    public float scoreMultiplier = 10f;
+    
+    // --- YENİ EKLENEN KISIM (BAŞLANGIÇ) ---
+    [Header("Game Over")]
+    public GameObject gameOverPanel; // Unity Editor'dan GameOver panelini buraya sürükle
+    public GameOverManager gameOverManager; // GameOverManager scriptini buraya sürükle
+    // --- YENİ EKLENEN KISIM (BİTİŞ) ---
 
-    void Awake()
-    {
-        // Singleton kurulumu
-        if (Instance == null)
-        {
-            Instance = this;
-            // (İsteğe bağlı) Sahne değişse bile GameManager'ı koru
-            // DontDestroyOnLoad(gameObject); 
-        }
-        else
-        {
-            // Eğer zaten bir GameManager varsa, bu yenisini yok et
-            Destroy(gameObject);
-        }
-    }
+    private float scoreCounter = 0f; 
+    private int displayScore = 0; 
+    private bool isGameActive = true; 
 
-    void Start()
-    {
-        // Oyuna başlarken skoru sıfırla
-        scoreCounter = 0f;
-        displayScore = 0;
-        UpdateScoreText();
-        isGameActive = true;
-    }
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
-    void Update()
-    {
-        // 4. Skor Artırma
-        // Sadece oyun aktifse (oyuncu ölmemişse) skoru artır
-        if (isGameActive)
-        {
-            // Geçen zamana (Time.deltaTime) göre skoru artır
-            scoreCounter += Time.deltaTime * scoreMultiplier;
-            
-            // Ekranda göstereceğimiz tam sayı skoru al
-            int newDisplayScore = (int)scoreCounter;
+    void Start()
+    {
+        scoreCounter = 0f;
+        displayScore = 0;
+        UpdateScoreText();
+        isGameActive = true;
 
-            // Sadece skor gerçekten değiştiyse UI Text'i güncelle (Performans için)
-            if (newDisplayScore > displayScore)
-            {
-                displayScore = newDisplayScore;
-                UpdateScoreText();
-            }
-        }
-    }
+        // --- GÜVENLİK ÖNLEMİ ---
+        // Oyun başladığında GameOver panelinin kapalı olduğundan emin ol
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
+    }
 
-    /// <summary>
-    /// UI'daki skor yazısını günceller.
-    /// </summary>
-    void UpdateScoreText()
-    {
-        if (scoreText != null)
-        {
-            // Text objesinin yazısını güncelle
-            scoreText.text = "Score: " + displayScore.ToString();
-        }
-    }
+    void Update()
+    {
+        if (isGameActive)
+        {
+            scoreCounter += Time.deltaTime * scoreMultiplier;
+            int newDisplayScore = (int)scoreCounter;
 
-    /// <summary>
-    /// Bu fonksiyon, oyuncu öldüğünde PlayerController tarafından çağrılacak.
-    /// </summary>
+            if (newDisplayScore > displayScore)
+            {
+                displayScore = newDisplayScore;
+                UpdateScoreText();
+            }
+        }
+    }
+
+    void UpdateScoreText()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + displayScore.ToString();
+        }
+    }
+
     public void GameOver()
     {
         isGameActive = false; // Skor sayacını durdur
-        Debug.Log("Oyun Bitti! Final Skor: " + displayScore);
-    }
+        Debug.Log("Oyun Bitti! Final Skor: " + displayScore);
+
+        // --- GÜNCELLENEN KISIM (BAŞLANGIÇ) ---
+        // 1. GameOver Panelini Aktif Et
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+
+        // 2. GameOverManager'a son skoru gönder
+        if (gameOverManager != null)
+        {
+            gameOverManager.SetScores(displayScore);
+        }
+        // --- GÜNCELLENEN KISIM (BİTİŞ) ---
+    }
+    
 }

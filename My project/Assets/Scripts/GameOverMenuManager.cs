@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // BU SATIRI EKLE (Text Mesh Pro kütüphanesi)
-using UnityEngine.SceneManagement; // Sahne yüklemek ve değiştirmek için bu kütüphane ŞART!
+using TMPro;
+using UnityEngine.SceneManagement; 
 
 public class GameOverManager : MonoBehaviour
 {
@@ -11,8 +11,6 @@ public class GameOverManager : MonoBehaviour
     // 1. "RETRY" (YENİDEN BAŞLAT) FONKSİYONU
     public void YenidenBaslat()
     {
-        // Bu kod, o an hangi sahne açıksa onu yeniden yükler.
-        // Yani "Level_1"deysek "Level_1"i, "Level_2"deysek "Level_2"yi yeniden başlatır.
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
