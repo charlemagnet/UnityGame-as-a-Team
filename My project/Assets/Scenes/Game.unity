@@ -925,11 +925,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::maphareket
   mapChunkPrefabs:
-  - {fileID: 1373070156548223578, guid: 42fbd7f78bd24d14fbfc32c58f27c5ea, type: 3}
-  - {fileID: 4026523769303505429, guid: 34f4c3ecdcb894840be3d0c9ae6e4b45, type: 3}
-  - {fileID: 604018792621012767, guid: 265ccdbd962ffc04d9484b43d54cc294, type: 3}
-  - {fileID: 649782206905821746, guid: 8b594f32afbb01e4c87ca1b6d1d42c0d, type: 3}
-  - {fileID: 5119328690113252537, guid: da31af02d0249b34dbfce392893d2446, type: 3}
+  - {fileID: 5036609271462129931, guid: f633dbd0eb7b244469eb28ac1ee28f98, type: 3}
+  - {fileID: 3207955652188151422, guid: 85bad182ce429c64dbc20b96e3348ab6, type: 3}
+  - {fileID: 9018869387707521935, guid: a01fe208e088fbd4c83822a46c3f4c33, type: 3}
+  - {fileID: 8518309881666283879, guid: a22a937799569ff4a88f808553f24e92, type: 3}
+  - {fileID: 891541351029035587, guid: fe0c4da9fce69e044829a9fee430c484, type: 3}
   - {fileID: 1892160378681889853, guid: 5808314c461c811499b8b880d10689e4, type: 3}
   activeChunks:
   - {fileID: 63593380}
