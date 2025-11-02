@@ -3,7 +3,7 @@ using UnityEngine;
 public class maphareket : MonoBehaviour
 {
     // [Inspector'dan Atanacaklar]
-    public GameObject[] mapChunkPrefabs; 
+    public GameObject[] mapChunkPrefabs;
     public GameObject[] activeChunks; // Lütfen bunları soldan sağa sıralı atayın!
     public Transform player; 
     public float chunkLength; 
