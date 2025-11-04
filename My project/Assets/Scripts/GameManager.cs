@@ -9,16 +9,20 @@ public class GameManager : MonoBehaviour
     [Tooltip("For score.")]
     public TextMeshProUGUI scoreText; // Oyun içindeki skor yazısı
 
-    [Header("Scoring")]
-    public float scoreMultiplier = 10f;
-    
     // --- YENİ EKLENEN KISIM (BAŞLANGIÇ) ---
-    [Header("Game Over")]
-    public GameObject gameOverPanel; // Unity Editor'dan GameOver panelini buraya sürükle
-    public GameOverManager gameOverManager; // GameOverManager scriptini buraya sürükle
+    [Header("Player Reference")]
+    [Tooltip("Skoru hesaplamak için oyuncunun Transform'unu buraya sürükleyin.")]
+    public Transform playerTransform; 
     // --- YENİ EKLENEN KISIM (BİTİŞ) ---
 
-    private float scoreCounter = 0f; 
+    [Header("Scoring")]
+    public float scoreMultiplier = 10f; // Skoru pozisyonla çarpmak için
+    
+    [Header("Game Over")]
+    public GameObject gameOverPanel;
+    public GameOverManager gameOverManager;
+
+    // private float scoreCounter = 0f; // Bu değişkene artık gerek yok.
     private int displayScore = 0; 
     private bool isGameActive = true; 
 
@@ -36,26 +40,34 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        scoreCounter = 0f;
+        // Oyuncu atanmamışsa hata ver
+        if (playerTransform == null)
+        {
+            Debug.LogError("GameManager: 'Player Transform' atanmamış! Lütfen Inspector'dan sürükleyin.");
+        }
+
         displayScore = 0;
         UpdateScoreText();
         isGameActive = true;
 
-        // --- GÜVENLİK ÖNLEMİ ---
-        // Oyun başladığında GameOver panelinin kapalı olduğundan emin ol
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
         }
     }
 
+    // --- BU FONKSİYON TAMAMEN GÜNCELLENDİ ---
     void Update()
     {
-        if (isGameActive)
+        // Sadece oyun aktifse ve player ataması yapıldıysa
+        if (isGameActive && playerTransform != null)
         {
-            scoreCounter += Time.deltaTime * scoreMultiplier;
-            int newDisplayScore = (int)scoreCounter;
+            // 1. Skoru, oyuncunun X pozisyonuna göre hesapla
+            // (Eğer oyuncu x=0'dan başlıyorsa bu doğrudur)
+            int newDisplayScore = (int)(playerTransform.position.x * scoreMultiplier);
 
+            // 2. Sadece skor artmışsa UI'ı güncelle
+            // (Bu, oyuncu bir şekilde geriye gitse bile skorun düşmesini engeller)
             if (newDisplayScore > displayScore)
             {
                 displayScore = newDisplayScore;
@@ -63,6 +75,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    // --- GÜNCELLEME BİTİŞ ---
 
     void UpdateScoreText()
     {
@@ -72,24 +85,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GameOver()
+    public void GameOver()
     {
         isGameActive = false; // Skor sayacını durdur
-        Debug.Log("Oyun Bitti! Final Skor: " + displayScore);
+        Debug.Log("Oyun Bitti! Final Skor: " + displayScore);
 
-        // --- GÜNCELLENEN KISIM (BAŞLANGIÇ) ---
-        // 1. GameOver Panelini Aktif Et
-        if (gameOverPanel != null)
+        // --- YENİ EKLENEN SATIR ---
+        Time.timeScale = 0f; // ZAMANI DURDUR!
+        // --- BİTİŞ ---
+
+        // 1. GameOver Panelini Aktif Et
+        if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
         }
 
-        // 2. GameOverManager'a son skoru gönder
-        if (gameOverManager != null)
+        // 2. GameOverManager'a son skoru gönder
+        if (gameOverManager != null)
         {
             gameOverManager.SetScores(displayScore);
         }
-        // --- GÜNCELLENEN KISIM (BİTİŞ) ---
-    }
-    
+    }
 }
