@@ -47,6 +47,7 @@ public class Asteroid : MonoBehaviour
         // Check 1: Did we hit the Player?
         if (other.CompareTag("Player"))
         {
+            SoundManager.PlaySound(SoundType.crash);
             // Get the PlayerController and call Die()
             PlayerController player = other.GetComponent<PlayerController>();
             if (player != null)

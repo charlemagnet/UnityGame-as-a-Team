@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     // Private components
     private Animator anim;
     private Rigidbody2D rb;
+    private float distanceTraveled = 0f;
+    private Vector3 lastPosition;
 
     // --- YENİ EKLENEN ANAHTAR (FLAG) ---
     private bool isMoveButtonPressed = false; // "Hareket et" tuşuna basılı tutuluyor mu?
@@ -28,9 +30,21 @@ public class PlayerController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        
+
         if (rb == null) Debug.LogError("Rigidbody2D eksik!");
         if (groundCheck == null) Debug.LogError("Ground Check objesi atanmamış!");
+    }
+    void Update()
+    {
+        distanceTraveled += Vector3.Distance(transform.position, lastPosition);
+        lastPosition = transform.position;
+
+        // Her 1 birim ilerleyince +1 puan verelim
+        if (distanceTraveled >= 1f)
+        {
+            GameManager.Instance.AddScore(1);
+            distanceTraveled = 0f;
+        }
     }
 
     void FixedUpdate()
@@ -59,18 +73,8 @@ public class PlayerController : MonoBehaviour
         // --- 2. ZEMİN KONTROLÜ (HER KARE) ---
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
         
-        // (Optional) Animator'u güncelle
-        // if (anim != null)
-        // {
-        //     anim.SetBool("isGrounded", isGrounded);
-        // }
     }
 
-    // --- PUBLIC INPUT FONKSİYONLARI (Bunları UI'dan çağıracağız) ---
-
-    /// <summary>
-    /// Zıplama butonunun 'On Click ()' eventi buna bağlanacak.
-    /// </summary>
     public void Jump()
     {
         if (isGrounded)
@@ -78,6 +82,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0); // Dikey hızı sıfırla
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isGrounded = false;
+            SoundManager.PlaySound(SoundType.jump_sound);
         }
     }
 
@@ -110,7 +115,7 @@ public class PlayerController : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.isKinematic = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
         }
     }
 

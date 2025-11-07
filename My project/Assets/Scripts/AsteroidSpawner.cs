@@ -92,6 +92,7 @@ public class AsteroidSpawner : MonoBehaviour
             if (prefabToSpawn != null) 
             {
                 Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
+                SoundManager.PlaySound(SoundType.fall);
             }
         }
     }
