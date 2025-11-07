@@ -1,4 +1,3 @@
-/* LaserSpawner.cs */
 using System.Collections;
 using UnityEngine;
 
@@ -92,6 +91,7 @@ public class LaserSpawner : MonoBehaviour
             if (laserPrefab != null)
             {
                 Instantiate(laserPrefab, spawnPosition, Quaternion.identity);
+                SoundManager.PlaySound(SoundType.laser);
             }
         }
     }
